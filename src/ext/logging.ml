@@ -163,7 +163,7 @@ object
         ( M.insrt_return_void dx cid mname; incr override_cnt )
       (* if apps overload lifecycle methods, M.override may fail *)
       (* TODO: use shorty to indicate the exact method signature *)
-      with D.Wrong_dex _ -> ()
+      with D.Wrong_dex _ -> (Log.i("P@$&*@2"^mname))
     in
     (* to avoid the Logger *)
     let cname = D.get_ty_str dx cid in
@@ -180,12 +180,15 @@ end
 let add_transition (dx: D.dex) : unit =
   (* insert method sig first so that M.override can find method_id_item *)
   let insrt_void_no_arg cid mname =
+    Log.i ("adding method: "^mname);
     ignore (M.new_sig dx cid mname J.v [])
   and insrt_void_intent cid mname =
     ignore (M.new_sig dx cid mname J.v [Acn.intent])
   in
   (* Activity family *)
   let per_act (comp: string) : unit =
+    Log.i ("activity: "^comp);
+
     let cid = M.new_class dx comp D.pub in
     (* Activity.onCreate *)
     let _ = M.new_sig dx cid App.onCreate J.v [Aos.bundle] in
