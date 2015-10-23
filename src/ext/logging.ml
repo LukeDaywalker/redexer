@@ -557,6 +557,7 @@ object
   method v_ins (ins: D.link) : unit =
     if D.is_ins dx ins then
     (
+      let cur_mname = mname in
       let op, opr = D.get_ins dx ins in
       match I.access_link op with
       | I.METHOD_IDS
@@ -573,7 +574,9 @@ object
           let lname = D.get_ty_str dx lid in
           let mname = D.get_mtd_name dx mid in
           let full = D.get_mtd_full_name dx mid in
-          let do_logging = instrument_method mname in
+          let do_logging = 
+            instrument_method mname || cur_mname = "doInBackground"
+          in
           if (not do_logging) then
             (Log.i ("skipping log of method "^ full))
           else
